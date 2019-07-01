@@ -57,7 +57,7 @@ var mqttX = {
 	},
 	reconnect:function(){
 		if(mqttX.client && options){
-			mqttX.client.reconnect({
+			mqttX.client.connect({
 				onSuccess:this.onConnect,
 		    	onFailure: this.onFailure,
 		        userName: options.userName || 'admin',  
