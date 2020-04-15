@@ -9,21 +9,34 @@ var fire_event = {
 		//}
 		return fire_event;
 	},	
-	trigger:function(obj){
+	trigger:function(options){
 		var myObj = {
-			type:obj.type,
-			page:obj.page || 'all'
+			type:options.type,
+			page:options.page || 'all'
 		};
-		var params = Array.prototype.slice.apply(arguments);
-		params.shift();
+		//debugger;
 		if(myObj.page == 'all'){
 			for(var key in listener){
-				listener[key][myObj.type].apply(this,params);
+				if(listener[key][myObj.type]){
+					var ret = listener[key][myObj.type].call(this,options);
+					if(options.success){ret?options.success(ret):options.success()}
+				}
 			}
 		}else{
 			if(listener.hasOwnProperty(myObj.page)){
-				listener[myObj.page][myObj.type].apply(this,params);
-				return;
+				if(listener[myObj.page][myObj.type]){
+					var ret = listener[myObj.page][myObj.type].call(this,options);
+					if(options.success){ret?options.success(ret):options.success()}							
+				}
+			}
+		}
+	},
+	remove:function(page,type){
+		if(page){
+			if(type){
+				delete listener[page][type]
+			}else{
+				delete listener[page]
 			}
 		}
 	}
